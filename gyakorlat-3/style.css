@@ -1,0 +1,47 @@
+body {
+    font-family: serif;
+    max-width: 600px;
+    margin: auto;
+    text-align: justify;
+}
+h1 {
+    text-align: center;
+    font-style: italic;
+    text-decoration: underline;
+    font-size: 60px;
+}
+blockquote {
+    text-align: right;
+    font-style: italic;
+    width: 100%;
+    margin: 0;
+}
+.highlight {
+    font-weight: bold;
+}
+.namediv {
+    background-color: gray;
+    padding: 5px;
+    margin: 10px;
+    font-size: 30px;
+}
+.box {
+    border: 1px solid gray;
+    background-color: lightgray;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    width: 400px;
+}
+.box img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+.box-content {
+    text-align: left;
+    margin: 10px;
+}
+.box-content p {
+    margin: 0;
+}
