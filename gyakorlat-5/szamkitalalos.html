@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Számkitaláló Játék</title>
+    <script>
+        function szamKitalaloJatek() {
+            const maxTippek = 20;
+            const keresettSzam = Math.round(Math.random() * 1000000);
+            let tippekSzama = 0;
+            let talalat = false;
+
+            while (tippekSzama < maxTippek && !talalat) {
+                const tipp = prompt("Kérlek, tippelj egy számot 0 és 1 000 000 között:");
+                const tippSzam = parseInt(tipp);
+
+                if (isNaN(tippSzam)) {
+                    alert("Kérlek, érvényes számot adj meg!");
+                    continue;
+                }
+
+                tippekSzama++;
+
+                if (tippSzam > keresettSzam) {
+                    alert(`${tippekSzama}. tipp nem talált: A megoldás kisebb.`);
+                } else if (tippSzam < keresettSzam) {
+                    alert(`${tippekSzama}. tipp nem talált: A megoldás nagyobb.`);
+                } else {
+                    alert(`Gratulálok, ${tippekSzama} lépésből eltaláltad!`);
+                    talalat = true;
+                }
+            }
+
+            if (!talalat) {
+                alert("Sajnos ez most nem sikerült! A keresett szám: " + keresettSzam);
+            }
+        }
+
+        function inditsdElJatekot() {
+            szamKitalaloJatek();
+        }
+    </script>
+</head>
+<body>
+    <h1>Számkitaláló Játék</h1>
+    <p>Kattints a gombra az alábbiakban a játék elindításához!</p>
+    <button onclick="inditsdElJatekot()">Játék indítása</button>
+</body>
+</html>
