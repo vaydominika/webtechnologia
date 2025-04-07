@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git App - Felhasználói profil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="user-search.html" class="btn btn-secondary">← Vissza a kereséshez</a>
+        <div id="user-content">
+            <div class="card">Adatok betöltése...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadUserData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('id');
+            
+            if (!username) {
+                document.getElementById('user-content').innerHTML = '<div class="card">Nincs megadva felhasználónév!</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+                if (!response.ok) {
+                    throw new Error('Felhasználó nem található');
+                }
+                const user = await response.json();
+
+                const userContent = document.getElementById('user-content');
+                let html = '<div class="card">';
+                
+                html += '<div class="row">';
+                html += `<div class="col"><img src="${user.avatar_url}" alt="${user.login} profilképe" style="width: 200px; border-radius: 5px;"></div>`;
+                html += '<div class="col-3">';
+                html += `<h2>${user.name || user.login}</h2>`;
+                if (user.bio) html += `<p>${user.bio}</p>`;
+                if (user.location) html += `<p>${user.location}</p>`;
+                if (user.blog) html += `<p><a href="${user.blog}" target="_blank">${user.blog}</a></p>`;
+                html += '</div>';
+                html += '</div>';
+
+                html += '<div class="row" style="margin-top: 20px;">';
+                html += `
+                    <div class="col">
+                        <div class="card">
+                            <h3 style="text-align: center;">${user.public_repos}</h3>
+                            <p style="text-align: center;">Publikus repó</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <h3 style="text-align: center;">${user.followers}</h3>
+                            <p style="text-align: center;">Követő</p>
+                        </div>
+                    </div>
+                `;
+                html += '</div>';
+                html += '</div>';
+                
+                userContent.innerHTML = html;
+            } catch (error) {
+                document.getElementById('user-content').innerHTML = `<div class="card">${error.message}</div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
+</body>
+</html>

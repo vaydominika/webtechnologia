@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git App - Felhasználó keresése</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="app.js"></script>
+    <div class="container">
+        <h4>Felhasználó keresése</h4>
+        <div class="row">
+            <div class="col">
+                <label for="username">Felhasználónév:</label>
+                <input type="text" id="username" placeholder="Felhasználónév">
+                <button id="search-button" class="btn btn-primary">Keresés</button>
+            </div>
+        </div>
+
+        <div id="user-results"></div>
+    </div>
+
+    <script>
+        function searchUser(username) {
+            fetch(`https://api.github.com/users/${encodeURIComponent(username)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Felhasználó nem található');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const userResults = document.getElementById('user-results');
+                    userResults.innerHTML = `
+                        <div class="card" style="cursor: pointer;" onclick="window.location.href='user.html?id=${data.login}'">
+                            <div class="row">
+                                <div class="col">
+                                    <img src="${data.avatar_url}" alt="${data.login} profilképe" style="width: 100px; border-radius: 5px;">
+                                </div>
+                                <div class="col-3">
+                                    <h5>${data.login}</h5>
+                                    ${data.name ? `<p>${data.name}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    const userResults = document.getElementById('user-results');
+                    userResults.innerHTML = `<div class="card">${error.message}</div>`;
+                });
+        }
+
+        const searchButton = document.getElementById('search-button');
+
+        searchButton.addEventListener('click', () => {
+            const username = document.querySelector('#username').value.trim();
+            if (username === '') {
+                alert('Kérlek, adj meg egy felhasználónevet!');
+            } else {
+                searchUser(username);
+            }
+        });
+
+        document.getElementById('username').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
